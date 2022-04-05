@@ -31,46 +31,16 @@ class RestaurantsController < ApplicationController
 
   def recommendations
 
-    user = User.last(10).first #current_user
-
-    restaurants = user.user_recommendations.last.recommendations.map { |h,k| h["restaurant_id"] }.map {|restaurant_id| Restaurant.find(restaurant_id)}
-
-    # restaurants = Restaurant.filter(params).page(params[:page]).per(params[:per])
-    # meta_pagination = { 
-    #   total_pages: restaurants.total_pages,
-    #   current_page: restaurants.current_page,
-    #   next_page: restaurants.next_page,
-    #   prev_page: restaurants.prev_page 
-    # }
+    if current_user.user_recommendations.blank?
+      restaurants = current_user.user_recommendations.last.recommendations.map { |h,k| h["restaurant_id"] }.map {|restaurant_id| Restaurant.find(restaurant_id)}
+    else
+      restaurants = Restaurant.order(stars: :desc).limit(10)
+    end
 
     render json:
       RestaurantSerializer.new(
         restaurants,
         params: { current_user: current_user },
-        # meta: {
-        #   total: restaurants.total_count,
-        #   pagination: meta_pagination
-        # }
-      )
-  end
-
-  def favorites
-    restaurants = Restaurant.filter(params).page(params[:page]).per(params[:per])
-    meta_pagination = { 
-      total_pages: restaurants.total_pages,
-      current_page: restaurants.current_page,
-      next_page: restaurants.next_page,
-      prev_page: restaurants.prev_page 
-    }
-
-    render json:
-      RestaurantSerializer.new(
-        restaurants,
-        params: { current_user: current_user },
-        meta: {
-          total: restaurants.total_count,
-          pagination: meta_pagination
-        }
       )
   end
 
@@ -82,7 +52,6 @@ class RestaurantsController < ApplicationController
       render json: {message: user_review.errors.full_messages }, status: 404
     end
   end
-
 
   def favorite
     user_favorite = Favorite.find_by(fav_params)
@@ -98,7 +67,6 @@ class RestaurantsController < ApplicationController
       render json: { message: "Unfavorited sucessfully" }
     end
   end
-
 
   private
 

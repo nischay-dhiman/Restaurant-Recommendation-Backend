@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :restaurants, only: :index do
     collection do
       get :recommendations
-      get :favorites
     end
 
     member do
