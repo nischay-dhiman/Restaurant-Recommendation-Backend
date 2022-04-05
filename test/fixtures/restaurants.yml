@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  address: MyText
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  latitude: 9.99
+  longitude: 9.99
+  stars: 1.5
+  review_count: 1
+  categories: MyText
+  business_id: MyString
+
+two:
+  name: MyString
+  address: MyText
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  latitude: 9.99
+  longitude: 9.99
+  stars: 1.5
+  review_count: 1
+  categories: MyText
+  business_id: MyString
