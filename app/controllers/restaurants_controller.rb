@@ -30,11 +30,10 @@ class RestaurantsController < ApplicationController
   end
 
   def recommendations
-
-    if current_user.user_recommendations.blank?
-      restaurants = current_user.user_recommendations.last.recommendations.map { |h,k| h["restaurant_id"] }.map {|restaurant_id| Restaurant.find(restaurant_id)}
+    if !current_user.user_recommendations.blank?
+      restaurants = Restaurant.where(id: current_user.user_recommendations.last.recommendations.map { |h,k| h["restaurant_id"]} ).filter_data(params)
     else
-      restaurants = Restaurant.order(stars: :desc).limit(10)
+      restaurants = Restaurant.order(stars: :desc).filter_data(params).limit(10)
     end
 
     render json:
